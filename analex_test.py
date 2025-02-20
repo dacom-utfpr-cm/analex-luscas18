@@ -21,12 +21,10 @@ def test_execute(input_file, args):
     process = subprocess.Popen(shlex.split(cmd), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     
     stdout, stderr = process.communicate()
-    stdout, stderr
 
     path_file = 'tests/' + input_file
     output_file = open(path_file + ".lex.out", "r")
 
-    #read whole file to a string
     expected_output = output_file.read()
 
     output_file.close()
@@ -36,5 +34,9 @@ def test_execute(input_file, args):
     print("Expected output:")
     print(expected_output)
 
-    assert stdout.decode("utf-8").strip() == expected_output.strip()
+    # Normaliza as quebras de linha antes de comparar
+    generated_output = stdout.decode("utf-8").strip().replace("\r\n", "\n").replace("\r", "\n")
+    expected_output_normalized = expected_output.strip().replace("\r\n", "\n").replace("\r", "\n")
 
+    # Compara as saídas normalizadas
+    assert generated_output == expected_output_normalized
